@@ -44,14 +44,22 @@ function getMostCommonGenres(books) {
   return mostCommonGenres
 }
 
-function getMostPopularBooks(books) {
-  let bookList = []
+// Helper Function for getMostPopularBooks
+
+function getBookObject (books) {
+  let booksArr = []
 
   books.forEach((book) => {
     let count = book.borrows.length
     let bookObj = { name: book.title, count: count}
-    bookList.push(bookObj)
+    booksArr.push(bookObj)
   })
+  return booksArr
+}
+
+function getMostPopularBooks(books) {
+  let bookList = getBookObject(books)
+
   bookList.sort((bookA, bookB) => bookA.count > bookB.count ? -1 : 1)
   let mostPopularBooks = bookList.slice(0, 5)
   return mostPopularBooks
@@ -63,20 +71,22 @@ function getMostPopularAuthors(books, authors) {
 
   authors.forEach((author) => {
     let authorObj = { name: `${author.name.first} ${author.name.last}`, count: count }
-    let found = books.forEach((book) => {
+    books.forEach((book) => {
       if(book.authorId === author.id) {
         authorObj.count = authorObj.count + book.borrows.length
-        return true
-      } else {
-        return false
+        authorList.push(authorObj)
       }
-    })
-    if (!found) {
-      authorList.push(authorObj)
-    }  
+    })   
   })
-  authorList.sort((authorA, authorB) => authorA.count > authorB.count ? -1 : 1)  
-  let mostPopularAuthors = authorList.slice(0, 5)
+  let authorListReduced = authorList.reduce((accumulator, currentValue) => {
+    if(!accumulator.includes(currentValue)) {
+      return [...accumulator, currentValue]
+    }
+    return accumulator
+  }, [])
+  
+  authorListReduced.sort((authorA, authorB) => authorA.count > authorB.count ? -1 : 1)  
+  let mostPopularAuthors = authorListReduced.slice(0, 5)
   return mostPopularAuthors
 }
 

@@ -7,19 +7,15 @@ function findBookById(books, id) {
 }
 
 function partitionBooksByBorrowedStatus(books) {
-  let checkedOut = books.filter((book) => book.borrows.returned === false)
-  let returned = books.filter((book) => book.borrows.returned === true)
+  let checkedOut = books.filter((book) => book.borrows[0].returned === false)
+  let returned = books.filter((book) => book.borrows[0].returned === true)
 
-  let checkedOutFiltered = []
-  let returnedFiltered = []
-
-  for (let i = 0; i < 6; i++) {
-    checkedOutFiltered.push(checkedOut[i])
-  }
-
-  for (let i = 0; i < 3; i++) {
-    returnedFiltered.push(returned[i])
-  }
+  let checkedOutFiltered = checkedOut.filter((item, index) => index < 6).map(item => {
+    return item
+  })
+  let returnedFiltered = returned.filter((item, index) => index < 3).map(item => {
+    return item
+  })
 
   let borrowedStatus = [checkedOutFiltered, returnedFiltered]
   return borrowedStatus

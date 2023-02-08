@@ -21,8 +21,6 @@ function getTotalNumberOfBorrows(account, books) {
   return timesBorrowed
 }
 
-// Helper function for getBooksPossessedByAccount function
-
 function getBooksPossessedByAccount(account, books, authors) {
   let accountBorrowsArr = []
   console.log(authors)
